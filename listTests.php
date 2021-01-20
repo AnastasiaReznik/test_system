@@ -1,5 +1,5 @@
 <h1 style='text-align:center'>Список всех опросов</h1>
-<a type="button" href="?add_test=true" class="btn btn-info" style="margin: 20px 0">Добавить опрос</a>
+<a type="button" href="?add_test=true" class="btn btn-warning" style="margin: 20px 0">Добавить опрос</a>
 <?php
 $stmt = $db->prepare("SELECT * FROM survey");
 $stmt->execute();
@@ -14,7 +14,7 @@ $allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 // 3 стр - запрос LIMIT 6,3
 
 
-$countTestOnPage = 2; //количество опросов на странице
+$countTestOnPage = 10; //количество опросов на странице
 
 $countNotes = count($allTest);
 $countPage = ceil($countNotes/$countTestOnPage); //количество страниц
@@ -29,15 +29,15 @@ if (isset($_GET['page']) AND is_numeric($_GET['page']))  {
 $stmt = $db->prepare("SELECT * FROM survey LIMIT $from, $countTestOnPage");
 $stmt->execute();
 $testsOnPage = $stmt->fetchAll(\PDO::FETCH_ASSOC); //записи кот нужно вывести на стр
-// var_dump($res);
+// debug($testsOnPage);
 
 foreach ($testsOnPage as $value) {
-    // echo 
+    echo 
   
       "<div class=\"list-group list-group-horizontal\">
       <a href=\"?test={$value['id']}\" class=\"list-group-item list-group-item-action\">{$value['name']}</a>
-      <a href=\"#\" class=\"list-group-item list-group-item-action\">Редактировать</a>
-      <a href=\"#\" class=\"list-group-item list-group-item-action\">Результат</a>
+      <a href=\"\" class=\"list-group-item list-group-item-action\">Редактировать</a>
+      <a href=\"?result={$value['id']}\" class=\"list-group-item list-group-item-action\">Результат</a>
       </div>
       ";
   }

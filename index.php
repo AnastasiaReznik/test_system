@@ -10,7 +10,12 @@
 <body>
 <div class="container">
     <?php 
+    function debug($data)
+    {
+        echo '<pre>' . print_r($data, 1) . '</pre>';
+    }
     include 'db_connect.php';
+    include 'dbQuery.php';
     if (!isset($_GET) OR empty($_GET) OR isset($_GET['page'])) {
       include 'listTests.php';
     } 
@@ -20,19 +25,27 @@
     if (isset($_GET['test']) AND !empty($_GET['test'])) {
       include 'goTest.php';
     }
-    // if (isset($_GET['result']) AND !empty($_GET['result'])) {
-    //   include 'goTest.php';
-    // }
+    if (isset($_GET['result']) AND !empty($_GET['result'])) {
+      include 'resultTest.php';
+    }
+
+    
+
+  
+  // function addResultTest($id_test, $field)
+  // {
+  //     // $oldRes = queryOne($field, 'survey', 'id', $id_test );
+  //     $stmt = $db->prepare("UPDATE survey SET {$field} = '$field'+1 WHERE `id` = ?"); //"UPDATE users SET `email` = '$email', `firstName` = '$name', `lastName` = '$lastName', `sex` = '$sex', `birthdate` = '$birthday' WHERE `id` = '$id_user'");
+  //     $stmt->execute([$id_test]);
+  //     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  // }
 
      //проверка наличия гет параметров в url 
     // $urlGet = $_SERVER['QUERY_STRING'];
     // parse_str($urlGet, $get);
     // print_r($get);
 
-    function debug($data)
-    {
-        echo '<pre>' . print_r($data, 1) . '</pre>';
-    }
+    
     ?>
     
  <nav aria-label="Page navigation example">

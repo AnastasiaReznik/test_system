@@ -6,31 +6,31 @@
 <div class="container">
     <div class="row">
         <h4 class='text-center'>Вопрос№1</h4>
-        <input type="text" required name='question1'>
+        <input type="text" required name='question1' class="newQuestion">
     </div>
     <div  class="radios">  
   <div class="row">
     <div class="col-sm">
       <p>Ответ№1</p>
-      <input type="text" name='answer1-1' required>
+      <input type="text" name='answer1-1' class='newAnswer answ1' required>
       <input type="radio" class="form-check-input" id="" name="radio1" required>
       <!-- <input class="form-check-input" type="radio" name="answer1" id=""> -->
     </div>
     <div class="col-sm">
     <p>Ответ№2</p>
-      <input type="text" name='answer2-1' required>
+      <input type="text" name='answer2-1' class='newAnswer answ1' required>
       <input type="radio" class="form-check-input" id="" name="radio1" required>
       <!-- <input class="form-check-input" type="radio" name="answer1" id=""> -->
     </div>
     <div class="col-sm">
     <p>Ответ№3</p>
-      <input type="text" name='answer3-1' required>
+      <input type="text" name='answer3-1' class='newAnswer answ1' required>
       <input type="radio" class="form-check-input" id="" name="radio1" required>
       <!-- <input class="form-check-input" type="radio" name="answer1" id=""> -->
     </div>
     <div class="col-sm">
     <p>Ответ№4</p>
-      <input type="text" name='answer4-1' required>
+      <input type="text" name='answer4-1' class='newAnswer answ1' required>
       <input type="radio" class="form-check-input" id="" name="radio1" required>
       <!-- <input class="form-check-input" type="radio" name="answer1" id=""> -->
     </div>
@@ -41,30 +41,30 @@
   </div>
   <div class="row">
         <h4 class='text-center'>Вопрос№2</h4>
-        <input type="text" name='question2' required>
+        <input type="text" name='question2' class="newQuestion" required>
     </div>
     <div class="row">
     <div class="col-sm">
       <p>Ответ№1</p>
-      <input type="text" name='answer1-2' required>
+      <input type="text" name='answer1-2' class='newAnswer answ2' required>
       <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio2" required>
 
     </div>
     <div class="col-sm">
     <p>Ответ№2</p>
-      <input type="text" name='answer2-2' required>
+      <input type="text" name='answer2-2' class='newAnswer answ2' required>
       <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio2" required>
       <!-- <input class="form-check-input" type="radio" name="answer2" id=""> -->
     </div>
     <div class="col-sm">
     <p>Ответ№3</p>
-      <input type="text" name='answer3-2' required>
+      <input type="text" name='answer3-2' class='newAnswer answ2' required>
       <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio2" required>
       <!-- <input class="form-check-input" type="radio" name="answer2" id=""> -->
     </div>
     <div class="col-sm">
     <p>Ответ№4</p>
-      <input type="text" name='answer4-2' required>
+      <input type="text" name='answer4-2' class='newAnswer answ2' required>
       <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio2" required>
       <!-- <input class="form-check-input" type="radio" name="answer2" id=""> -->
     </div>
@@ -75,32 +75,53 @@
   </div>
 </form>
 
-
-<?php 
-if (isset($_POST['nameTest']) AND !empty($_POST['nameTest']) ) {
-  // echo 'new test';
-  addTest($_POST['nameTest'], $_POST['question'], $_POST['question']);
-  // foreach ($_POST as $key => $valueInput) {
-    
-  // }
-};
-
-function addTest($nameTest, $questions, $answers)
-{
-  debug($_POST);
-
-  // $stmt = $db->prepare("SELECT name FROM survey WHERE id = ?");
-  // $stmt->execute([$_GET['test']]);
-  // $allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-};
-
-?>
-
-
-
-
 <script> 
+$('#formAddTest').submit(function (e) {
+    e.preventDefault();
+  //назв теста
+  let nameTest = $(this).parent(".container").find('input[name="nameTest"]').val(); 
 
+  // вопросы - 5шт
+  const arrQuestion = [$(this).parent(".container").find('.newQuestion')];
+  // console.log(arrQuestion);
+
+  // ответы - 20шт
+  const arrAnswers = [$(this).parent(".container").find('.newAnswer')];
+  console.log(arrAnswers);
+
+  $(this).parent(".container").find('.newQuestion').each(function (ind, quest) {
+    $(this).parent(".container").find('.newAnswer').each(function (index, answer) {
+    // console.log($(this).val()); //ответы из инпутов
+
+  }
+  
+    });
+
+  // $.ajax({
+  //             method: "POST",
+  
+  //             url: "ajax.php",
+  
+  //             data: {
+  //                 successAnswer: cor,
+  //                 errorAnswer: uncor,
+  //                 idTest: idTest,
+  //             }
+  
+  //         }).done(function(resp) {
+  //             if (resp == false) {
+  //                 alert('Ошибка.Повторите позже!');
+  //             } else {
+  //                 // var res = JSON.parse(resp);
+  //                 console.log(resp);
+  //             }
+  //         })
+});
+
+
+
+
+//проверка выбрано ли радио-поле
 // $('#formAddTest').submit(function (e) {
 //     e.preventDefault();
     // console.log($(this).parent(".container").find('input[name="nameTest"]').val());  //название опроса
@@ -135,5 +156,8 @@ function addTest($nameTest, $questions, $answers)
 //         console.log('Выберите правильный вариант ответа!');
 //     }
 // });
+
+
+
 
 </script>
