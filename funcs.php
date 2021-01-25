@@ -1,27 +1,29 @@
 <?php
+require 'db_connect.php';
 function debug($data)
 {
     echo '<pre>' . print_r($data, 1) . '</pre>';
 }
-function queryOne($table, $field= null, $value = null)
+function queryOne(&$db,$table, $field= null, $value = null)
 {
-    global $db;
+    // global $db;
+    $db_glob = $GLOBALS['db'];
     if ($field != null AND $value != null) {
-        $stmt = $db->prepare("SELECT * FROM {$table} WHERE {$field} = ?");
+        $stmt = $db_glob->prepare("SELECT * FROM {$table} WHERE {$field} = ?");
         $stmt->execute([$value]);
     } else {
-        $stmt = $db->prepare("SELECT * FROM {$table}");
+        $stmt = $db_glob->prepare("SELECT * FROM {$table}");
         $stmt->execute();
         // $allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    return $stmt->fetch(\PDO::FETCH_ASSOC);
     // debug($allTest);
 }
 
-function queryAll($table_name, $param = null, $param_value = null)
+function queryAll(&$db,$table_name, $param = null, $param_value = null)
 //"SELECT * FROM {$table_name} WHERE {$param_name} = ?"
 {
-    global $db;
+    // global $db;
     if ($param != null and $param_value != null) {
     $stmt = $db->prepare("SELECT * FROM {$table_name} WHERE {$param} = ?");
     } else {
@@ -32,17 +34,17 @@ function queryAll($table_name, $param = null, $param_value = null)
     // debug($stmt);
 }
 
-function addResultTest($field, $id_test)
+function addResultTest(&$db,$field, $id_test)
 {
-    global $db;
+    // global $db;
     $stmt = $db->prepare("UPDATE survey SET {$field} = {$field}+1 WHERE `id` = ?"); 
-    $stmt->execute([$id_test]);
-    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    return $stmt->execute([$id_test]);
+    // return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
 
-function addTest($newTest)
+function addTest(&$db,$newTest)
 {
-    global $db;
+    // global $db;
     $nameTest = $newTest['nameTest'];
     $stmt = $db->prepare("INSERT INTO survey (`name`) VALUES (?)"); 
     $res = $stmt->execute([$nameTest]);
@@ -104,9 +106,9 @@ function addTest($newTest)
  }
 }
 
-function updateTest($dataTest)
+function updateTest(&$db,$dataTest)
 {
-    global $db;
+    // global $db;
     $nameTest = $dataTest['nameTestEdit']; //имя теста
     $stmt = $db->prepare("UPDATE survey SET `name` = ? WHERE `id` = ?"); 
     $res = $stmt->execute([$nameTest, $_GET['edit']]);
