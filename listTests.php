@@ -1,19 +1,9 @@
+<div class="container">
 <h1 style='text-align:center'>Список всех опросов</h1>
 <a type="button" href="?add_test=true" class="btn btn-warning" style="margin: 20px 0">Добавить опрос</a>
 <?php
-$stmt = $db->prepare("SELECT * FROM survey");
-$stmt->execute();
-$allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-// include 'db_connect.php';
-// var_dump($db);
-// $countTestOnPage = 2; //количество опросов на странице
-// $from = ($numPage - 1) * $countTestOnPage; //с какого эл-та выводить на стр
-// 1 стр - запрос LIMIT 0,3
-// 2 стр - запрос LIMIT 3,3
-// 3 стр - запрос LIMIT 6,3
-
-
+$allTest = queryOne('survey');
+// пагинация
 $countTestOnPage = 10; //количество опросов на странице
 
 $countNotes = count($allTest);
@@ -33,14 +23,12 @@ $testsOnPage = $stmt->fetchAll(\PDO::FETCH_ASSOC); //записи кот нуж�
 
 foreach ($testsOnPage as $value) {
     echo 
-  
       "<div class=\"list-group list-group-horizontal\">
       <a href=\"?test={$value['id']}\" class=\"list-group-item list-group-item-action\">{$value['name']}</a>
-      <a href=\"\" class=\"list-group-item list-group-item-action\">Редактировать</a>
+      <a href=\"?edit={$value['id']}\" class=\"list-group-item list-group-item-action\">Редактировать</a>
       <a href=\"?result={$value['id']}\" class=\"list-group-item list-group-item-action\">Результат</a>
       </div>
       ";
   }
-  
-  
 ?>
+</div>

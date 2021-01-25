@@ -1,41 +1,17 @@
-<!-- <h1>TEST</h1> -->
 <?php 
-$stmt = $db->prepare("SELECT * FROM survey WHERE id = ?");
-$stmt->execute([$_GET['test']]);
-$allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+$allTest = queryAll('survey','id', $_GET['test'] );
 // debug($allTest);
 
-$stmt = $db->prepare("SELECT * FROM questions WHERE id_survey = ?");
-$stmt->execute([$_GET['test']]);
-$questions = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+$questions =  queryAll('questions', 'id_survey', $_GET['test']);
 // debug($questions);
 
-// $stmt = $db->prepare("SELECT id FROM questions WHERE id_survey = ?");
-// $stmt->execute([$_GET['test']]);
-// $id_questions = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-// var_dump($id_questions);
-
-$stmt = $db->prepare("SELECT * FROM answer WHERE id_survey = ?");
-$stmt->execute([$_GET['test']]);
-$all_answers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+$all_answers = queryAll('answer', 'id_survey', $_GET['test']);
 // debug($all_answers);
-
-
-
-
 
  //проверка наличия гет параметров в url 
     // $urlGet = $_SERVER['QUERY_STRING'];
     // parse_str($urlGet, $get);
     // print_r($get);
-
-
-// foreach ($all_answers as $key => $val) {
-    // if ($val['id_question'] == )
-    // $k = $val['id_question'];
-    // $answerQ = $val['answer'];
-    // $arrAnswer[$k] = ['answer' => [$answerQ]];
-// }
 
 // var_dump($arrAnswer);
 // [номер вопроса1] = [[0] => ответ1,
@@ -49,15 +25,16 @@ $all_answers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 
 ?>
-
-<h1 class='nameTest' data-id="<?=  $allTest[0]['id'] ?>"><?= $allTest[0]['name'];  ?></h1>
-<form method='POST' id="test">
+<div class="container">
+<a class="btn btn-primary" href="/" >На главную</a>
+<h1 class='nameTest text-center' data-id="<?=  $allTest[0]['id'] ?>"><?= $allTest[0]['name'];  ?></h1>
+<form method='POST' style="width:500px" id="test" class="mx-auto">
         <?php foreach ($questions as $key => $question) : ?>
     <span>Вопрос <?= $key+1; ?> </span>
     <?= $question['questions']; ?>
         <ul class="list-unstyled">
             <?php foreach ($all_answers as $answer) : ?>
-                <?php if ( $question['id'] == $answer['id_question'] ) : ?>
+                <?php if ( $key+1 == $answer['id_question'] ) : ?>
                         <li>
                         <input class="form-check-input" type="radio" name="answer<?= $answer['id_question']; ?> " data-correct=<?=$answer['correct_answer']?> required>
                         <label for=""><?= $answer['answer']; ?> </label>
@@ -75,10 +52,12 @@ $all_answers = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         <div class="alert alert-danger result-uncor" role="alert" hidden>       
         </div>
 </form>
-    
+ </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>   
 <script>
 $('#test').submit(function (e) {
     e.preventDefault();
+    console.log(123);
     const tmp = `<button type="button" class="btn btn-warning reset">Пройти заново</button>`;
     $(".wrapper").html(tmp);
     var cor = 0;
@@ -100,7 +79,6 @@ $('#test').submit(function (e) {
             // console.log('правильный ответ');
         }
     });
-
 
     console.log('true' + cor);
     $('.result').removeAttr('hidden').text('Правильных ответов: ' + cor);
