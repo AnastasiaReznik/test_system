@@ -1,3 +1,18 @@
+<?php 
+require_once 'db_connect.php';
+require_once 'funcs.php';
+require_once 'config.php';
+if (!empty($_GET)) {
+    $res_check_get = checkIssetGet($arr_get, $db);
+    if ($res_check_get == 'true') {
+        header("Location: resultTest.php?result=1");
+        die();
+    }
+  } 
+  else {
+    header("Location: resultTest.php?result=1");
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +26,6 @@
 <div class="container">
 <h1>Результаты</h1>
 <?php 
-require_once 'db_connect.php';
-require_once 'funcs.php';
 $urlGet = $_SERVER['QUERY_STRING'];
 parse_str($urlGet, $get);
 // debug($get['result']);

@@ -1,25 +1,37 @@
 <?php
 require 'db_connect.php';
+// require_once 'config.php';
 function debug($data)
 {
     echo '<pre>' . print_r($data, 1) . '</pre>';
 }
-function queryOne(&$db,$table, $field= null, $value = null)
+function checkIssetGet(&$arr_get, &$db)
 {
-    // global $db;
-    $db_glob = $GLOBALS['db'];
-    if ($field != null AND $value != null) {
-        $stmt = $db_glob->prepare("SELECT * FROM {$table} WHERE {$field} = ?");
-        $stmt->execute([$value]);
-    } else {
-        $stmt = $db_glob->prepare("SELECT * FROM {$table}");
-        $stmt->execute();
-        // $allTest = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-    return $stmt->fetch(\PDO::FETCH_ASSOC);
-    // debug($allTest);
+    $urlGet = $_SERVER['QUERY_STRING'];
+    parse_str($urlGet, $get_url);
+    // debug($get_url);
+    foreach ($arr_get as $k => $getParam) {
+        // echo $get_url[$getParam];
+        if (isset($get_url[$getParam])) {
+            $name_get = $get_url[$getParam];
+           if (empty($name_get)) {
+             header("Location:" . $_SERVER['PHP_SELF']);
+           } else { //если не пустой- запрос в бд
+             $id_test_from_get =  $get_url[$getParam];
+             $check_isset_test = queryAll($db,'survey', 'id', $id_test_from_get);
+             if (empty($check_isset_test)) {
+              header("HTTP/1.0 404 Not Found");
+              die();
+             }
+           }
+          $notFoungGet = 'false';
+          break;
+        }  else {
+            $notFoungGet='true';
+        }
+      }
+      return $notFoungGet;
 }
-
 function queryAll(&$db,$table_name, $param = null, $param_value = null)
 //"SELECT * FROM {$table_name} WHERE {$param_name} = ?"
 {
@@ -44,20 +56,11 @@ function addResultTest(&$db,$field, $id_test)
 
 function addTest(&$db,$newTest)
 {
-    // global $db;
     $nameTest = $newTest['nameTest'];
     $stmt = $db->prepare("INSERT INTO survey (`name`) VALUES (?)"); 
     $res = $stmt->execute([$nameTest]);
-    // debug($res);
+    $id_test = $db->lastInsertId(); //id новго теста
     if ($res == 1) {
-        // echo 'добавлено';
-        // взять id нового опроса
-        $stmt = $db->prepare("SELECT LAST_INSERT_ID() AS idNewTest"); 
-        $res_query_select = $stmt->execute();
-        if ($res_query_select == 1) {
-            $new_test = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            $id_test = $new_test[0]['idNewTest']; //id новго теста
-
         // вставка вопросов и ответов в бд
             foreach ($newTest as $key => $value) {
                 // вставка впоросов в бд
@@ -73,7 +76,6 @@ function addTest(&$db,$newTest)
                     // поиск правильного ответа
                         $current = current($newTest);
                         $next = next($newTest);
-
                         if (stristr($key, 'answer') !== false) { //елси дальше ответ
                             $substr_id = substr($key, -1); //id вопроса
                             $stmt = $db->prepare("INSERT INTO answer (`answer`, `correct_answer`, `id_question`, `id_survey`) VALUES (?, ?, ?,?)");
@@ -93,9 +95,6 @@ function addTest(&$db,$newTest)
                         }
             }
         } 
-    } else {
-        return 'false';
-    }
 } else {
     return 'false';
 }
@@ -120,7 +119,6 @@ function updateTest(&$db,$dataTest)
             //    debug(stristr($key, 'nameQuestionEdit'));
                 $id_question = substr($key,16);
                 $stmt = $db->prepare("UPDATE questions SET `questions` = ? WHERE `id` = ?"); 
-
                 // $stmt = $db->prepare("UPDATE questions SET `questions` = ? WHERE `id` = ?"); 
                 $res_update_question = $stmt->execute([$value, $id_question]);
                 if (!$res_update_question) {
@@ -144,9 +142,7 @@ function updateTest(&$db,$dataTest)
             } else {
                 $res_update = 'true';
             }
-
             }
-
         }
     } else {
         return 'false';

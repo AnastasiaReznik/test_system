@@ -1,3 +1,38 @@
+<?php
+require_once 'db_connect.php';
+require_once 'funcs.php';
+require_once 'config.php';
+if (!empty($_GET)) {
+    $res_check_get = checkIssetGet($arr_get, $db);
+    if ($res_check_get == 'true') {
+        header("Location: edit.php?edit=1");
+        die();
+    }
+  } 
+  else {
+    header("Location: edit.php?edit=1");
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST['nameTestEdit']) AND !empty($_POST['nameTestEdit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value) OR is_int($value)) {
+            $res_update = updateTest($db,$_POST);
+            if ($res_update) {
+                header("Refresh:0");
+                // header("Location:" . $_SERVER['PHP_SELF']);
+                // echo $res_update;
+            } else {
+                alert('При редактировании произошла ошибка!');
+            }
+        }
+    }
+}
+$allTest = queryAll($db,'survey','id', $_GET['edit'] );
+// debug($allTest);
+$questions =  queryAll($db,'questions', 'id_survey', $_GET['edit']);
+// debug($questions);
+$all_answers = queryAll($db,'answer', 'id_survey', $_GET['edit']);
+// debug($all_answers);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,29 +43,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-<?php
-require_once 'db_connect.php';
-require_once 'funcs.php';
-if (isset($_POST['nameTestEdit']) AND !empty($_POST['nameTestEdit'])) {
-    // debug($_POST);
-    $res_update = updateTest($db,$_POST);
-    if ($res_update) {
-        header("Refresh:0");
-        // header("Location:" . $_SERVER['PHP_SELF']);
-        // echo $res_update;
-    } else {
-        alert('При редактировании произошла ошибка!');
-    }
-}
-$allTest = queryAll($db,'survey','id', $_GET['edit'] );
-// debug($allTest);
-
-$questions =  queryAll($db,'questions', 'id_survey', $_GET['edit']);
-// debug($questions);
-
-$all_answers = queryAll($db,'answer', 'id_survey', $_GET['edit']);
-// debug($all_answers);
-?>
 <div class="container">
 <a class="btn btn-primary" href="/" >На главную</a>
 <h1  class="text-center">Редактирование опроса</h1>
