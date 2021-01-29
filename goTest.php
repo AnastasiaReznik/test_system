@@ -47,10 +47,7 @@ if (isset($_POST) AND !empty($_POST)) {
         alert('Произошла ошибка!');
     }
 };
-?>
-<?php require_once 'header.php'; ?>
 
-<?php
 $allTest = queryAll($db,'survey','id', $_GET['test']);
 // debug($allTest);
 
@@ -64,7 +61,9 @@ $all_answers = queryAll($db,'answer', 'id_survey', $_GET['test']);
     // $urlGet = $_SERVER['QUERY_STRING'];
     // parse_str($urlGet, $get);
     // print_r($get);
+    $page = 'Тест';
 ?>
+<?php require_once 'header.php'; ?>
 <div class="container">
 <a class="btn btn-primary" href="/" >На главную</a>
 <h1 class='nameTest text-center' data-id="<?=  $allTest[0]['id'] ?>"><?= $allTest[0]['name'];  ?></h1>

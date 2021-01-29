@@ -12,6 +12,7 @@ if (!empty($_GET)) {
   else {
     header("Location: resultTest.php?result=1");
   }
+$page = 'Результаты теста';
 ?>
 <?php require_once 'header.php'; ?>
 

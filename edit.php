@@ -32,6 +32,7 @@ $questions =  queryAll($db,'questions', 'id_survey', $_GET['edit']);
 // debug($questions);
 $all_answers = queryAll($db,'answer', 'id_survey', $_GET['edit']);
 // debug($all_answers);
+$page = 'Редактирование теста';
 ?>
 <?php require_once 'header.php'; ?>
 

@@ -25,6 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" AND isset($_POST['nameTest']) AND !empt
       }     
     }
   // }
+$page = 'Добавление теста';
+
 ?>
 <?php require_once 'header.php'; ?>
 <div class="container">

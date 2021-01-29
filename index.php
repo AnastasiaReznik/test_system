@@ -5,6 +5,7 @@ require_once 'config.php';
 if (!empty($_GET) AND (!isset($_GET['page']))) {
   header("Location: index.php");
 }
+$page = 'Главная';
 ?>
 <?php require_once 'header.php'; ?>
 <h1 style='text-align:center'>Список всех опросов</h1>

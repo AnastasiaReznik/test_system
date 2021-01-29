@@ -14,6 +14,8 @@ if (!empty($_GET)) {
 // запрос к бд - отразить по id из гет кол-во правильных и не правильных ответов
 $id_test = $_GET['result_id']; //id теста которого надо тобразить  рез-ты
 $test = queryAll($db, 'survey', 'id', $_GET['result_id']);
+$page = 'Результат';
+
 ?>
 <?php require_once 'header.php'; ?>
 
